@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="USBGPIO" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="StoreFileBody" Type="System.String" Scope="User">
+      <Value Profile="(Default)">USB_GPIO</Value>
+    </Setting>
+    <Setting Name="VendorID" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">4096</Value>
+    </Setting>
+    <Setting Name="USBIO1" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">256</Value>
+    </Setting>
+    <Setting Name="USBIO2" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">288</Value>
+    </Setting>
+    <Setting Name="USBIO2AKI" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">289</Value>
+    </Setting>
+    <Setting Name="IsUpgraded" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

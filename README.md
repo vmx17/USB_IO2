@@ -3,7 +3,7 @@
 A HID controller software for Akizuki USB-IO2.0(AKI)  
 
 ## What is this?
-This is a C# converted [Akizuki USB-IO2.0(AKI)](https://akizukidenshi.com/catalog/g/g105131/) HID controller. The device can be used as GPIO (up to 12 pins) module over USB.
+This is a C# rewritten [Akizuki USB-IO2.0(AKI)](https://akizukidenshi.com/catalog/g/g105131/) HID controller. The device can be used as GPIO (up to 12 pins) module over USB.
 I made this for my personal project.
 
 ## Status
