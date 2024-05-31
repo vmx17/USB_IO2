@@ -8,6 +8,6 @@ I made this for my personal project.
 
 ## Status
 The original module `USB-IO2.0` is provided by [Km2Net Inc.](https://km2net.com/usb-io2.0/io_sample_kai.shtml). It has some additional features to `USB-IO2.0(AKI)`.
-The software provided by `Km2Net Inc.` for `USB-IO2.0` seems to be limited not to port to another programming language. It was in VisualBasic.
-The latest software for `USB-IO2.0(AKI)` was made in Windows7 era. So I port it to C# using WindowsForms on .Net 8.
+The software provided by `Km2Net Inc.`. It seems I should follow their lisence and [here is it](https://creativecommons.org/licenses/by-sa/3.0/).
+The latest software for `USB-IO2.0(AKI)` was made in Windows7 era in VisualBasic. So I port it to C# using WindowsForms on .Net 8.
 The design and function is almost same but it is not converted by code converter from VB to C#. All manual rework.
