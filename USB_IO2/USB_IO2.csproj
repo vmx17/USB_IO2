@@ -6,7 +6,7 @@
 	<UseWindowsForms>true</UseWindowsForms>
     <UseWinFormsOutOfProcessDesigner>true</UseWinFormsOutOfProcessDesigner>
     <RootNamespace>USB_IO2</RootNamespace>
-    <Nullable>enable</Nullable>
+    <!--<Nullable>enable</Nullable>-->
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Notify\Notify.csproj" />
     <ProjectReference Include="..\USBGPIO\USBGPIO.csproj" />
   </ItemGroup>
 

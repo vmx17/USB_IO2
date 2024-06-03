@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -6,7 +6,7 @@ using Microsoft.Win32.SafeHandles;
 namespace USBGPIO
 {
     /// <summary>
-    /// Win32 APIとInteropするためのヘルパークラス
+    /// helper class to interop with Win32 API
     /// </summary>
     public class Win32Stub
     {
@@ -108,7 +108,7 @@ namespace USBGPIO
         }
 
         public const int WM_DEVICECHANGE = 0x0219;
-        // WM_DEVICECHANGEのイベントタイプ
+        // event type of WM_DEVICECHANGE
         public const int DBT_CONFIGCHANGECANCELED = 0x0019;
         public const int DBT_CONFIGCHANGED = 0x0018;
         public const int DBT_CUSTOMEVENT = 0x8006;
@@ -122,7 +122,7 @@ namespace USBGPIO
         public const int DBT_QUERYCHANGECONFIG = 0x0017;
         public const int DBT_USERDEFINED = 0xffff;
 
-        // SetupDiGetClassDevs() のFlagsで使用
+        // use at Flats of SetupDiGetClassDevs()
         public const int DIGCF_DEFAULT = 0x00000001;
         public const int DIGCF_PRESENT = 0x00000002;
         public const int DIGCF_ALLCLASSES = 0x00000004;
@@ -140,13 +140,13 @@ namespace USBGPIO
         public const int DEVICE_NOTIFY_SERVICE_HANDLE = 0x00000001;
         public const int DEVICE_NOTIFY_ALL_INTERFACE_CLASSES = 0x00000004;
 
-        // 	PurgeComm()で使用
+        // use at PurgeComm()
         public const uint PURGE_TXABORT = 0x00000001;
         public const uint PURGE_RXABORT = 0x00000002;
         public const uint PURGE_TXCLEAR = 0x00000004;
         public const uint PURGE_RXCLEAR = 0x00000008;
 
-        // CreateFile()で使用
+        // use at CreateFile()
         public const uint GENERIC_READ = 0x80000000;
         public const uint GENERIC_WRITE = 0x40000000;
 
@@ -200,9 +200,9 @@ namespace USBGPIO
         protected static extern void HidD_GetHidGuid(out Guid HidGuid);
 
         /// <summary>
-        /// 指定されたクラスに所属するすべてのデバイスが含まれている1つのデバイス情報セットを返します。リモートコンピュータ上のデバイスに関するデバイス情報セットを取得するには、SetupDiGetClassDevsEx関数を使います。
+        /// return a device information set that include all devices belong to specified class. Use `SetupDiGetClassDevsEx()` to get device information set on remote computer
         /// </summary>
-        /// <param name="ClassGuid">セットアップクラスまたはインターフェイスクラスのクラスGUIDへのポインタを指定します。</param>
+        /// <param name="ClassGuid">specify pointer to class GUID of setup class or interface class</param>
         /// <param name="Emulator">返されたデバイスをフィルタ処理する文字列へのポインタを指定します。</param>
         /// <param name="hwndParent">このセットのメンバに関連するすべてのユーザーインターフェイスが利用する、トップレベルウィンドウのハンドルを指定します。</param>
         /// <param name="Flags">デバイス情報セットの構築に使われる制御オプションを指定します。このパラメータには、次に示す1つまたは複数の値を指定することができます。 </param>

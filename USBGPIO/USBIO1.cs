@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;    // for Path
 using System.Linq;
@@ -11,7 +11,7 @@ namespace USBGPIO
     {
         //=========================================================================================
         /// <summary>
-        /// ピンポジション
+        /// pin position
         /// </summary>
         [Flags]
         public enum IO
@@ -28,20 +28,20 @@ namespace USBGPIO
 
         //=========================================================================================
         /// <summary>
-        /// USBIOの型番 拡張したいけどやめたところ
+        /// device type of USBIO
         /// </summary>
         [Flags]
         public enum DevType : int
         {
             u100 = 0x100,   // USB-IO1.0
-            u120 = 0x120,   // USB-IO2.0        Kmnet版
-            u121 = 0x121    // USB-IO2.1(AKI)	秋月版
+            u120 = 0x120,   // USB-IO2.0        Kmnet version
+            u121 = 0x121    // USB-IO2.1(AKI)	Akizuki vertion
         }
         // Vendor IDは0x1352
 
         //=========================================================================================
         /// <summary>
-        /// USBIO1.0用コマンド送り先ポート
+        /// command send port for USBIO1.0
         /// </summary>
         [Flags]
         public enum iCmdSendTarget : byte

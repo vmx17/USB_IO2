@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -477,7 +477,7 @@ namespace USBGPIO
         /// </summary>
         /// <param name="hHandle">登録したWindow ハンドル</param>
         /// <returns>関数が成功すると、0 以外の値が返ります。</returns>
-        public static bool UnregisterWindowToReceiveDeviceNofication(IntPtr hHandle)
+        public static bool UnregisterWindowToReceiveDeviceNotification(IntPtr hHandle)
         {
             return UnregisterDeviceNotification(hHandle);
         }

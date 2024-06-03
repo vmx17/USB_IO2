@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;    // for Path
 using System.Linq;
@@ -9,12 +9,12 @@ namespace USBGPIO
 {
     public class USBIO2 : HIDDevice, IDisposable
     {
-        // 設定パス
-        internal static string m_settingPath;   // このパスはアセンブリ共通で良いところまで
+        // setting path
+        internal static string m_settingPath;
 
         //=========================================================================================
         /// <summary>
-        /// ピンポジション
+        /// pin position
         /// </summary>
         [Flags]
         public enum IO : int
@@ -31,16 +31,16 @@ namespace USBGPIO
 
         //=========================================================================================
         /// <summary>
-        /// USBIOの型番 拡張したいけどやめたところ
+        /// device type of USBIO
         /// </summary>
         [Flags]
         public enum DevType : int
         {
             u100 = 0x100,   // USB-IO1.0
-            u120 = 0x120,   // USB-IO2.0        Kmnet版
-            u121 = 0x121    // USB-IO2.1(AKI)	秋月版
+            u120 = 0x120,   // USB-IO2.0        Kmnet version
+            u121 = 0x121    // USB-IO2.1(AKI)	Akizuki version
         }
-        // Vendor IDは0x1352
+        // Vendor ID is 0x1352
 
         //=========================================================================================
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -31,56 +31,56 @@ namespace USBGPIO
         internal string m_settingFPath;
         //internal UsbHidDevice m_usbhid;
 
-        [Description("ログなどのメッセージを上位向けに発行します。")]
+        [Description("send messages like log, to other object")]
         [Category("Embedded Event")]
         [DisplayName("OnNotify")]
         public event EventHandler OnNotify;
 
         /// <summary>
-        /// 指定されたデバイスが見つかった場合にイベントを発行します。
+        /// invoke event when specified device id discovered.
         /// </summary>
-        [Description("指定されたデバイスが見つかった場合にイベントを発行します。")]
+        [Description("Invoke event when specified device id discovered.")]
         [Category("Embedded Event")]
         [DisplayName("OnSpecifiedDeviceArrived")]
         public event EventHandler OnSpecifiedDeviceArrived;
 
         /// <summary>
-        /// 指定されたデバイスが削除された場合にイベントを発行します。
+        /// Invoke event when specified device is removed.
         /// </summary>
-        [Description("指定されたデバイスが削除された場合にイベントを発行します。")]
+        [Description("Invoke event when specified device is removed.")]
         [Category("Embedded Event")]
         [DisplayName("OnSpecifiedDeviceRemoved")]
         public event EventHandler OnSpecifiedDeviceRemoved;
 
         /// <summary>
-        ///	指定されたデバイスがバス上に見つかった際にイベントを発行します。
+        ///	Invoke event when specified device is discovered on bus.
         /// </summary>
-        [Description("指定されたデバイスがバス上に見つかった際にイベントを発行します。")]
+        [Description("Invoke event when specified device is discovered on bus.")]
         [Category("Embedded Event")]
         [DisplayName("OnDeviceArrived")]
         public event EventHandler OnDeviceArrived;
 
         /// <summary>
-        /// 指定されたデバイスがバス上から削除された際にイベントを発行します。
+        /// Invoke event when specified device is removed on bus.
         /// </summary>
-        [Description("指定されたデバイスがバス上から削除された際にイベントを発行します。")]
+        [Description("Invoke event when specified device is removed on bus.")]
         [Category("Embedded Event")]
         [DisplayName("OnDeviceRemoved")]
         public event EventHandler OnDeviceRemoved;
 
 
         /// <summary>
-        /// 指定したデバイスからデータを受信した際に登録されたイベントを実行。
+        /// invoke event when receive data from spcific device
         /// </summary>
-        [Description("デバイスからデータを受信した時、イベントを発行")]
+        [Description("Invoke event when receive data from device")]
         [Category("Embedded Event")]
         [DisplayName("OnDataRecieved")]
         public event OnDataReceivedEventHandler OnDataReceived;
 
         /// <summary>
-        /// データ送信時にイベントを発行します。
+        /// invoke event when data send
         /// </summary>
-        [Description("データ送信時にイベントを発行します。")]
+        [Description("Invoke event when data send")]
         [Category("Embedded Event")]
         [DisplayName("OnDataSend")]
         public event EventHandler OnDataSend;
@@ -100,9 +100,9 @@ namespace USBGPIO
             // add one by one
             m_PIDCandidates = new uint[] { Settings.Default.USBIO1, Settings.Default.USBIO2, Settings.Default.USBIO2AKI };
             //m_PIDCandidates.Append<uint>(Settings.Default.USBIO2);
-            //m_PIDCandidates.Append<uint>(Settings.Default.USBIO2AKI);   // 0x0121	// 秋月
+            //m_PIDCandidates.Append<uint>(Settings.Default.USBIO2AKI);   // 0x0121	// Akizuki
 
-            //m_nProductID = Settings.Default.USBIO2AKI;   // 0x0121	// 秋月
+            //m_nProductID = Settings.Default.USBIO2AKI;   // 0x0121	// Akizuki
             m_nProductID = 0;
             m_ProductName = "unknown device";
             //m_usbhid = new UsbHidDevice((int)m_nVendorID, (int)m_nProductID);
@@ -117,12 +117,7 @@ namespace USBGPIO
 
             //InitializeComponent();
         }
-        /*
-		public USBDeviceMonitor(IContainer container, int id = 0) : this(id)
-		{
-			container.Add(this);    // 崩れるかも
-		}
-		*/
+
         [Description("The product id from the USB device you want to use")]
         [DefaultValue("(none)")]
         [Category("Embedded Details")]
@@ -133,9 +128,9 @@ namespace USBGPIO
                 return this.m_nProductID;
             }
             /*set
-			{
-				this.m_nProductID = value;
-			}*/
+            {
+                this.m_nProductID = value;
+            }*/
         }
 
         [Description("The vendor id from the USB device you want to use")]
@@ -148,9 +143,9 @@ namespace USBGPIO
                 return this.m_nVendorID;
             }
             /*set
-			{
-				this.m_nVendorID = value;
-			}*/
+            {
+                this.m_nVendorID = value;
+            }*/
         }
 
         [Description("The product name derived from ProductId")]
@@ -163,9 +158,9 @@ namespace USBGPIO
                 return this.m_ProductName;
             }
             /*set
-			{
-				this.m_nProductID = value;
-			}*/
+            {
+                this.m_nProductID = value;
+            }*/
         }
 
         [Description("The Device Class the USB device belongs to")]
@@ -201,12 +196,6 @@ namespace USBGPIO
             }
         }
 
-        /*public UsbHidDevice HidDevice
-		{
-			get { return m_usbhid; }
-		}
-		*/
-        //=========================================================================================
         /// <summary>
         /// 
         /// </summary>
@@ -217,40 +206,38 @@ namespace USBGPIO
             this.m_pnHandle = pnHandle;
         }
 
-        //=========================================================================================
         /// <summary>
-        /// アプリケーションの登録を削除します。これによりデバイスに関する通知を受け取らなくします。  
+        /// unregistration application not to receive notification on the device  
         /// </summary>
-        /// <returns>成功した場合はTrueを返します。</returns>
+        /// <returns>true when succeeded</returns>
         public bool UnregisterHandle()
         {
-            if (this.m_pnHandle != null)
+            if (this.m_pnHandle != IntPtr.Zero)
             {
-                return HIDDevice.UnregisterWindowToReceiveDeviceNofication(this.m_pnHandle);
+                return HIDDevice.UnregisterWindowToReceiveDeviceNotification(this.m_pnHandle);
             }
 
             return false;
         }
 
-        //=========================================================================================
         /// <summary>
-        /// Windowに送付されるメッセージを確認、処理します。
+        /// chech and operate messages sent to Window
         /// </summary>
-        /// <param name="msg">Windowメッセージ</param>
+        /// <param name="msg">Window message</param>
         public void ParseMessages(ref System.Windows.Forms.Message msg)
         {
             if (msg.Msg == Win32Stub.WM_DEVICECHANGE)   // 0x0219
             {
                 switch (msg.WParam.ToInt32())
                 {
-                case Win32Stub.DBT_DEVICEARRIVAL:   // デバイス接続
+                case Win32Stub.DBT_DEVICEARRIVAL:   // connect device
                     if (OnDeviceArrived != null)
                     {
                         OnDeviceArrived(this, new EventArgs());
                         CheckDevicePresent();
                     }
                     break;
-                case Win32Stub.DBT_DEVICEREMOVECOMPLETE:    // デバイス削除
+                case Win32Stub.DBT_DEVICEREMOVECOMPLETE:    // delete device
                     if (OnDeviceRemoved != null)
                     {
                         OnDeviceRemoved(this, new EventArgs());
@@ -261,10 +248,9 @@ namespace USBGPIO
             }
         }
 
-        //=========================================================================================
         /// <summary>
-        /// デバイスが使用可能か、存在しているかを確認し、あればデバイスパスを
-        /// 開いてOnSpecifiedDeviceArrivedを発火。でなければRemovedを発火。
+        /// Check if the device is existed and enabled, then open device path
+        /// and fire OnSpecifiedDeviceArrived. OTherwise fire `removed`
         /// </summary>
         public void CheckDevicePresent()
         {
@@ -301,25 +287,25 @@ namespace USBGPIO
                     this.OnSpecifiedDeviceRemoved(this, new EventArgs());
                 }
                 /*
-				m_strDevicePath = Device.FindDevice(m_nVendorID, m_nProductID);
-				if (!string.IsNullOrWhiteSpace(m_strDevicePath))
-				{
-					Device.Open(m_strDevicePath);
-					if (OnSpecifiedDeviceArrived != null)
-					{
-						this.OnSpecifiedDeviceArrived(this, new EventArgs());
-						Device.DataRecieved += new OnDataReceivedEventHandler(OnDataReceived);
-						Device.DataSend += new OnDataSendEventHandler(OnDataSend);
-					}
-				}
-				else
-				{
-					if (OnSpecifiedDeviceRemoved != null && fExist)
-					{
-						this.OnSpecifiedDeviceRemoved(this, new EventArgs());
-					}
-				}
-				*/
+                m_strDevicePath = Device.FindDevice(m_nVendorID, m_nProductID);
+                if (!string.IsNullOrWhiteSpace(m_strDevicePath))
+                {
+                    Device.Open(m_strDevicePath);
+                    if (OnSpecifiedDeviceArrived != null)
+                    {
+                        this.OnSpecifiedDeviceArrived(this, new EventArgs());
+                        Device.DataRecieved += new OnDataReceivedEventHandler(OnDataReceived);
+                        Device.DataSend += new OnDataSendEventHandler(OnDataSend);
+                    }
+                }
+                else
+                {
+                    if (OnSpecifiedDeviceRemoved != null && fExist)
+                    {
+                        this.OnSpecifiedDeviceRemoved(this, new EventArgs());
+                    }
+                }
+                */
             }
             catch (Exception ex)
             {

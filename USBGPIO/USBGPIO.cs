@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;    // for Path
 using System.Linq;
@@ -9,12 +9,12 @@ namespace USBGPIO
 {
     public class USBGPIO : HIDDevice, IDisposable
     {
-        // 設定パス
-        internal static string m_settingPath;   // このパスはアセンブリ共通で良いところまで
+        // Setting path
+        internal static string m_settingPath;
 
         //=========================================================================================
         /// <summary>
-        /// ピンポジション
+        /// pin position
         /// </summary>
         [Flags]
         public enum IO : int
@@ -31,84 +31,84 @@ namespace USBGPIO
 
         //=========================================================================================
         /// <summary>
-        /// USBIOの型番 拡張したいけどやめたところ
+        /// Device ID
         /// </summary>
         [Flags]
         public enum DeviceId : uint
         {
             u100 = 0x100,	// USB-IO1.0
-            u120 = 0x120,	// USB-IO2.0        Kmnet版
-            u121 = 0x121	// USB-IO2.1(AKI)	秋月版
+            u120 = 0x120,	// USB-IO2.0        Kmnet
+            u121 = 0x121	// USB-IO2.1(AKI)	Akizuki
         }
         // Vendor IDは0x1352
 
         //=========================================================================================
         /// <summary>
-        /// HID送信レイアウト(65byte)における、各バイトの指定:Commandが0x20の時に使う
+        /// byte setting in HID Send layout(65byte): use when Command is 0x20
         /// </summary>
         public enum SendIO : int
         {
             ReportID = 0,
             Command = 1,
-            Target1 = 2,    // 0x0無出力, 0x1ポート1, 0x2ポート2
-            Data1 = 3,      // Target1で指定したポートに出力するデータ
-            Target2 = 4,    // 0x0無出力, 0x1ポート1, 0x2ポート2
-            Data2 = 5,      // Target2で指定したポートに出力するデータ
-            Sequence = 64   // コマンドシーケンス番号（ローカルルール）
+            Target1 = 2,    // 0x0 no output, 0x1 port1, 0x2 port2
+            Data1 = 3,      // data send to the port specified by Target1
+            Target2 = 4,    // 0x0 no output, 0x1 port1, 0x2 port2
+            Data2 = 5,      // data output to the port specified by Target2
+            Sequence = 64   // command sequence number (local rule)
         }
         //=========================================================================================
         /// <summary>
-        /// HID送信レイアウト(65byte)における、各バイトの指定:Commandが0xF9の時に使う
+        /// byte setting in HID Send Layout (65byte): use when Command is 0xF9
         /// </summary>
         public enum SendConfig : int
         {
             ReportID = 0,
             Command = 1,
-            PullUp = 3,     // J2のプルアップ 0x0:有効, 0x1:無効
-            Port1 = 6,      // ポート1 I/O設定 bitが1なら入力ピン
-            Port2 = 7,      // ポート2 I/O設定 bitが1なら入力ピン
-            Sequence = 64   // コマンドシーケンス番号（ローカルルール）
+            PullUp = 3,     // pullup J2 0x0:on, 0x1:off
+            Port1 = 6,      // I/O setting for port1 1:input 0:output
+            Port2 = 7,      // I/O setting for port2 1:input 0:output
+            Sequence = 64   // command sequence number (local rule)
         }
         //=========================================================================================
         /// <summary>
-        /// HID I/O受信レイアウト(65byte)における、各バイトの指定:Commandが0x20の時に使う
+        /// byte setting in HID I/O receiving layout (65byte):use when Command is 0x20
         /// </summary>
         public enum RecvIO : int
         {
             ReportID = 0,
             Command = 1,
-            Port1 = 2,      // ポート1入力値
-            Port2 = 3,      // ポート2入力値
-            Sequence = 64   // コマンドシーケンス番号（ローカルルール）
+            Port1 = 2,      // input value of port 1
+            Port2 = 3,      // input value of port 2
+            Sequence = 64   // command sequence number (local rule)
         }
         //=========================================================================================
         /// <summary>
-        /// HID 設定受信レイアウト(65byte)における、各バイトの指定
+        /// byte setting in HID receive layout (65byte)
         /// </summary>
         public enum RecvConfig : int
         {
             ReportID = 0,
             Command = 1,
             PullUp = 3,
-            Port1 = 6,      // J1入力ピン設定ビット 1:入力, 0:出力
-            Port2 = 7,      // J2入力ピン設定ビット 1:入力, 0:出力
-            Sequence = 64   // コマンドシーケンス番号（ローカルルール）
+            Port1 = 6,      // J1 pin setting bit 1:input 0:output
+            Port2 = 7,      // J2 pin setting bit 1:input 0:output
+            Sequence = 64   // command sequence number (local rule)
         }
         //=========================================================================================
         /// <summary>
-        /// USB-IOへの命令番号（複数のスレッドが交錯せずに使える場合のみ使用）
+        /// command number for USB-IOへ (use only when multiple thead does not interfare)
         /// </summary>
         [Flags]
         public enum CommandFixed : byte
         {
-            ReadSet = 0xF8,     // 設定の読み出し
-            WriteSet = 0xF9,    // 設定の書き込み
-            InOut = 0x20        // 値の読み込み
+            ReadSet = 0xF8,     // read settting
+            WriteSet = 0xF9,    // write setting
+            InOut = 0x20        // read value
         }
 
         //=========================================================================================
         /// <summary>
-        /// 設定値
+        /// setting value
         /// </summary>
         [Serializable]
         public class Port
@@ -159,7 +159,7 @@ namespace USBGPIO
 
         //========================================================================
         /// <summary>
-        /// 現在のデバイスの設定値をデバイスから読み込む
+        /// read current device setting from the device
         /// </summary>
         public Port GetPortConfiguration()
         {
@@ -170,9 +170,9 @@ namespace USBGPIO
             port = new Port();
             sendBuffer = new byte[OutputReportLength];
 
-            sendBuffer[(int)SendIO.Command] = (byte)CommandFixed.ReadSet; // 0xf8;  // システム設定: 読み込み
+            sendBuffer[(int)SendIO.Command] = (byte)CommandFixed.ReadSet; // 0xf8;  // system setting: read
 
-            sendBuffer[(int)SendIO.Sequence] = 0x00; // シーケンス
+            sendBuffer[(int)SendIO.Sequence] = 0x00; // sequennce
 
             Send(sendBuffer);
             readBuffer = Receive();
@@ -180,7 +180,7 @@ namespace USBGPIO
             port.Pullup = IsPullup;
             port.J1 = (IO)Buffer[6];
             port.J2 = (IO)Buffer[7];
-			*/
+            */
             port.Pullup = (readBuffer[(int)RecvConfig.PullUp] == 0x0);
             port.J1 = (IO)readBuffer[(int)RecvConfig.Port1];
             port.J2 = (IO)readBuffer[(int)RecvConfig.Port2];
@@ -190,7 +190,7 @@ namespace USBGPIO
 
         //=========================================================================================
         /// <summary>
-        /// デバイスに設定値を書き込む
+        /// write setting to the device
         /// </summary>
         /// <param name="j1"></param>
         /// <param name="j2"></param>
@@ -201,10 +201,10 @@ namespace USBGPIO
 
             sendBuffer = new byte[OutputReportLength];
 
-            sendBuffer[(int)SendConfig.ReportID] = 0;   // 固定値
-            sendBuffer[(int)SendConfig.Command] = (byte)CommandFixed.WriteSet;// 0xf9; // システム設定: 書き込み
+            sendBuffer[(int)SendConfig.ReportID] = 0;   // fixed value
+            sendBuffer[(int)SendConfig.Command] = (byte)CommandFixed.WriteSet;// 0xf9; // System setting: write
 
-            sendBuffer[(int)SendConfig.Sequence] = (byte)0x00; // シーケンス
+            sendBuffer[(int)SendConfig.Sequence] = (byte)0x00; // sequence
 
             sendBuffer[(int)SendConfig.PullUp] = (byte)(fPullUp ? 0x00 : 0x01);
 
@@ -223,7 +223,7 @@ namespace USBGPIO
 
         //=========================================================================================
         /// <summary>
-        /// Digital I/O 監視
+        /// Digital I/O watching
         /// </summary>
         /// <param name="J1"></param>
         /// <param name="J2"></param>
@@ -234,13 +234,13 @@ namespace USBGPIO
 
             port = new Port();
             sendBuffer = new byte[OutputReportLength];
-            sendBuffer[(int)SendIO.ReportID] = 0;   //固定値
+            sendBuffer[(int)SendIO.ReportID] = 0;   // fixed value
             sendBuffer[(int)SendIO.Command] = (byte)CommandFixed.InOut;    // 0x20;
 
-            sendBuffer[(int)SendIO.Target1] = 0x01; // ポート1
+            sendBuffer[(int)SendIO.Target1] = 0x01; // port 1
             sendBuffer[(int)SendIO.Data1] = (byte)_iJ1;
 
-            sendBuffer[(int)SendIO.Target2] = 0x02; // ポート2
+            sendBuffer[(int)SendIO.Target2] = 0x02; // port 2
             sendBuffer[(int)SendIO.Data2] = (byte)_iJ2;
 
             sendBuffer[(int)SendIO.Sequence] = 0x00;
@@ -255,8 +255,8 @@ namespace USBGPIO
         }
 
         /// <summary>
-        /// データ保存
-        /// ファイル名は強制的に置き換えられる
+        /// store data
+        /// filename is replaced
         /// </summary>
         /// <param name="setpath"></param>
         /// <param name="j1"></param>
@@ -284,22 +284,22 @@ namespace USBGPIO
             try
             {
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(Port));
-                // UTF-8 BOM無し
+                // UTF-8 no BOM
                 using (sw = new System.IO.StreamWriter(fpath, false, new System.Text.UTF8Encoding(false)))
                 {
-                    //シリアル化し、XMLファイルに保存する
+                    // serialize to save in XML
                     serializer.Serialize(sw, _port);
                 }
             }
             catch
             {
-                throw new InvalidOperationException("Could not Save to \"" + fpath + "\".");
+                throw new InvalidOperationException($"Could not Save to \"{fpath}\".");
             }
             return fpath;
         }
 
         /// <summary>
-        /// ファイル読み込み
+        /// read file
         /// </summary>
         /// <param name="_setpath"></param>
         /// <param name="_id"></param>
@@ -318,10 +318,10 @@ namespace USBGPIO
             try
             {
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(Port));
-                //読み込むファイルを開く
+                // open file
                 using (StreamReader sr = new System.IO.StreamReader(fpath, new System.Text.UTF8Encoding(false)))
                 {
-                    //XMLファイルから読み込み、逆シリアル化する
+                    // read XML and deserialize
                     port = (Port)serializer.Deserialize(sr);
                 }
             }
@@ -334,7 +334,7 @@ namespace USBGPIO
     }
 
     /// <summary>
-    /// Flagのチェック用ヘルパークラス
+    /// helper class to check Flag
     /// </summary>
     public static class EnumExtensions
     {
@@ -346,9 +346,9 @@ namespace USBGPIO
         private static void CheckIsEnum<T>(bool withFlags)
         {
             if (!typeof(T).IsEnum)
-                throw new ArgumentException(string.Format("Type '{0}' は、列挙型ではありません。", typeof(T).FullName));
+                throw new ArgumentException(string.Format("Type '{0}' is not enum type", typeof(T).FullName));
             if (withFlags && !Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
-                throw new ArgumentException(string.Format("Type '{0}' は、'Flags' 属性が設定されていません。", typeof(T).FullName));
+                throw new ArgumentException(string.Format("Type '{0}' is not set 'Flags' attribute", typeof(T).FullName));
         }
 
         /// <summary>
